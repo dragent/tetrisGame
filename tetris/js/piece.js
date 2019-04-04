@@ -35,9 +35,9 @@ class piece  {
     }
     
     
-    miseEnPlace(   x,max)
+    miseEnPlace(x,max)
     {
-        this.x=x;
+        this.x=this.x+x;
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
@@ -53,6 +53,7 @@ class piece  {
     changement(val_x,val_y,max)
     {
         var first=false;
+        var min;
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
@@ -60,20 +61,24 @@ class piece  {
                  if(this.mat[i][j]!==0)
                  {
                      if(this.mat[i][j]!==0)
-                     {
-                         if(!first)
-                         {
-                            this.x=this.mat[i][j]%max;
-                            this.y=Math.floor(this.mat[i][j]/max);
-                            console.log("x  : "+this.x+" y : "+this.y + " mat : "+this.mat[i][j]+" val_y : "+val_y+" max : "+max);
-                            first=!first;
-                         }
-                         this.mat[i][j]=this.mat[i][j]+val_x+(val_y*max);
-                         
+                     { 
+                        if(!first)
+                        {
+                           min=this.mat[i][j];
+                           first=!first;
+                        }
+                        else if (min>this.mat[i][j])
+                        {
+                            min=this.mat[i][j];
+                        }
+                        this.mat[i][j]=(this.x+val_x)+((this.y+val_y+(j*10))*max);
                      }
                  }
             }
         }
+           this.x=this.x+val_x;
+           this.y=this.y+val_y;;
+           
     }
 
     touchefond(taille_max,largeur)
@@ -89,9 +94,8 @@ class piece  {
                }
             }
         }
-        max=(Math.floor(max/largeur));
-        return (taille_max-10)<max;
-        
+        max=max/largeur;
+        return (taille_max-10)<max;        
     }
     getX()
     {
@@ -107,7 +111,19 @@ class piece  {
     {
         return this.forme;
     }
-  
+    
+    isOnIt( pos)
+    {
+        for(i=0;i<4;i++)
+        {
+            for(j=0;j<4;j++)
+            {
+                if(this.mat[i][j]===pos)
+                    return true;
+            }
+        }
+        return false;
+    }
 }
 
 

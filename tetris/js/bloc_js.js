@@ -15,6 +15,7 @@ $(document).ready(function()
     const T = "t_forme";
     const l = "line";
     const S = "square";
+    var descend=true;
     var $cadre=$("#cadre").get(0);
     var $ctx=$("#cadre").get(0).getContext('2d');
     var $pseudo;
@@ -118,7 +119,7 @@ $(document).ready(function()
             y=0;
             x=5*w;
             piece_act=new piece(tableau_Mat[rand]);
-            piece_act.miseEnPlace(w,x,$cadre.width);
+            piece_act.miseEnPlace(x,$cadre.width);
             draw();
         }
     });
@@ -131,7 +132,6 @@ $(document).ready(function()
         {
             x=Tab_piece[i].getX();
             y=Tab_piece[i].getY();
-           // console.log("x : "+Tab_piece[i].getX()+"/ y : "+Tab_piece[i].getY());
             creaAlea(found(Tab_piece[i].getForme()));
         }
         x=tmpX;
@@ -153,19 +153,44 @@ $(document).ready(function()
             dessin();
     }
     
+    function verif(temp)
+    {
+        
+        for(var i=0;i<4;i++)
+        {
+            for(var j=0;j<4;j++)
+            {
+                console.log(i,j);
+                for(var k=0;k<Tab_piece.length;k++)
+                {   
+                    if(Tab_piece[k].isOnIt(temp.mat[i][j]))
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     function draw()
     {
         $ctx.clearRect(0,0,$cadre.width,$cadre.height);
         init();
         creaAlea(rand);
-       
-        if(!(piece_act.touchefond($cadre.height,$cadre.width/12)))
+        var temp=piece_act;
+        if((!(piece_act.touchefond($cadre.height,$cadre.width/12)))&&(descend))
         { 
-            piece_act.changement(0,h,$cadre.width/12);
+            temp.changement(0,h,$cadre.width/12);
+            if(!verif(temp))
+            {
+                descend=false;
+            }
+            piece_act=temp;
+            delete temp;
             y+=h;
         }
         else
         {
+            descend=true;
             Tab_piece.push(piece_act);
             y=0;
             rand=Math.floor(Math.random() * Math.floor(tableau_Mat.length));
