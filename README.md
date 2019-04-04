@@ -11,13 +11,14 @@ rigth now :
         Creation of the forms
         Random creation and selection of object and forms
         Animation to the bottom
-        
-    - doing :
         Save of the locations of the last piece
         Correction of the value position on the grill
-      
+        
+    - doing :
+              Colision between the piece
+              
+              
     - undone : 
-        Colision between the piece
         Colision with the right and left border
         Colision with the top
         Event on key board
