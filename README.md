@@ -13,15 +13,16 @@ rigth now :
         Animation to the bottom
         Save of the locations of the last piece
         Correction of the value position on the grill
+        Colision between the piece
+        Colision with the top
         
     - doing :
-              Colision between the piece
+        Getting actual time
+        Event on key board
+        Colision with the right and left border
               
               
     - undone : 
-        Colision with the right and left border
-        Colision with the top
-        Event on key board
         Suppresion of lines
         Update of the score
         Restart of the game
