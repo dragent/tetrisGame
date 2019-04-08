@@ -26,3 +26,5 @@ rigth now :
         Suppresion of lines
         Update of the score
         Restart of the game
+        Putting Css
+        
