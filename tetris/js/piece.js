@@ -4,10 +4,12 @@
  * 
  */
 
-var $cadre=$("#cadre");
 var incr=0;
+
+    
 class piece  {
     
+ 
     constructor(forme)
     {
         this.x=0;
@@ -37,14 +39,15 @@ class piece  {
     
     miseEnPlace(x,max)
     {
-        this.x=this.x+x;
+        this.x+=x;
+        this.y=10;
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
             {
                  if(this.mat[i][j]!==0)
                  {
-                      this.mat[i][j]=this.mat[i][j]+x+(max*j);
+                      this.mat[i][j]=x+(i*25)+(max*(j*10));
                  }
             }
         }
@@ -71,16 +74,18 @@ class piece  {
                         {
                             min=this.mat[i][j];
                         }
-                        this.mat[i][j]=(this.x+val_x)+((this.y+val_y+(j*10))*max);
+                        this.mat[i][j]=(this.x+(25*i)+val_x);
+                        this.mat[i][j]+=((this.y+j*10+val_y)*max);
                      }
                  }
             }
         }
-           this.x=this.x+val_x;
-           this.y=this.y+val_y;;
+        this.x+=val_x;
+        this.y+=val_y;
            
     }
 
+    
     touchefond(taille_max,largeur)
     {
         var i,j,max=0;
@@ -97,6 +102,7 @@ class piece  {
         max=max/largeur;
         return (taille_max-10)<max;        
     }
+    
     getX()
     {
         return this.x;
@@ -111,6 +117,20 @@ class piece  {
     {
         return this.forme;
     }
+     setX(x)
+    {
+       this.x=x;
+    }
+    
+    setY(y)
+    {
+       this.y=y;
+    }
+    
+    setForme(forme)
+    {
+        this.forme=forme;
+    }
     
     isOnIt( pos)
     {
@@ -118,11 +138,24 @@ class piece  {
         {
             for(j=0;j<4;j++)
             {
-                if(this.mat[i][j]===pos)
+                if((this.mat[i][j]===pos)&&(pos>0))
+                {
                     return true;
+                }
             }
         }
         return false;
+    }
+    
+    getMatX( i, j,w)
+    {   
+        console.log(this.mat[i][j]);
+       return (this.mat[i][j]%w);
+    }
+    
+    getMatY(i, j,w)
+    {
+       return(this.mat[i][j]/w);
     }
 }
 

@@ -53,3 +53,10 @@ h1{
     top:38%;
     font-size: 24px;
 }
+
+#time{
+    position: absolute;
+    top:5%;
+    left:5%;
+    color: white;
+}
