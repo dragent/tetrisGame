@@ -15,10 +15,10 @@ rigth now :
         Colision between the piece
         Colision with the top
         Getting actual time
+        Correction of the value position on the grill
         
     - doing :
         Event on key board
-        Correction of the value position on the grill
         Colision with the right and left border
               
               
