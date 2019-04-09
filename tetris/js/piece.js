@@ -6,6 +6,10 @@
 
 var incr=0;
 
+function   verifSide(actX,i,valX,max)
+{
+    return (((actX+(i*25)+valX)<0)||((actX+(i*25)+valX)>=max));
+}
     
 class piece  {
     
@@ -18,24 +22,25 @@ class piece  {
         incr++;
         this.forme=forme;
         switch(forme){
-            case 'square': this.mat=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+            case 'square': this.mats=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
                     break;
-            case 'L_forme': this.mat=[[1,1,1,0],[0,0,1,0],[0,0,0,0],[0,0,0,0]];
+            case 'L_forme': this.mats=[[1,1,1,0],[0,0,1,0],[0,0,0,0],[0,0,0,0]];
                     break;
-            case 't_forme': this.mat=[[1,0,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
+            case 't_forme': this.mats=[[1,0,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
                     break;
-            case 'line' : this.mat=[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]];
+            case 'line' : this.mats=[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]];
                     break;
-            case 'No_L_forme':this.mat=[[0,0,1,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
+            case 'No_L_forme':this.mats=[[0,0,1,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
                     break;
-            case 'Z_forme':this.mat=[[1,0,0,0],[1,1,0,0],[0,1,0,0],[0,0,0,0]];
+            case 'Z_forme':this.mats=[[1,0,0,0],[1,1,0,0],[0,1,0,0],[0,0,0,0]];
                     break;
-            case 'No_Z_forme' : this.mat=[[0,1,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
+            case 'No_Z_forme' : this.mats=[[0,1,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
                     break;
         }
       
     }
     
+  
     
     miseEnPlace(x,max)
     {
@@ -45,43 +50,61 @@ class piece  {
         {
             for(var j=0;j<4;j++)
             {
-                 if(this.mat[i][j]!==0)
+                 if(this.mats[i][j]!==0)
                  {
-                      this.mat[i][j]=x+(i*25)+(max*(j*10));
+                      this.mats[i][j]=x+(i*25)+(max*(j*10));
                  }
             }
         }
     }
     
-    changement(val_x,val_y,max)
+    changement(valX,valY,max)
     {
         var first=false;
+        var sortie=false;
         var min;
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
             {
-                 if(this.mat[i][j]!==0)
-                 {
-                     if(this.mat[i][j]!==0)
-                     { 
-                        if(!first)
-                        {
-                           min=this.mat[i][j];
-                           first=!first;
-                        }
-                        else if (min>this.mat[i][j])
-                        {
-                            min=this.mat[i][j];
-                        }
-                        this.mat[i][j]=(this.x+(25*i)+val_x);
-                        this.mat[i][j]+=((this.y+j*10+val_y)*max);
-                     }
+                if(this.mats[i][j]!==0)
+                { 
+                   if(!first)
+                   {
+                      min=this.mats[i][j];
+                      first=!first;
+                   }
+                   else if (min>this.mats[i][j])
+                   {
+                       min=this.mats[i][j];
+                   }
+                   if(verifSide(this.x,i,valX,max))
+                   {
+                       sortie=true;
+                   }
+                   this.mats[i][j]=(this.x+(25*i)+valX);
+                   this.mats[i][j]+=((this.y+j*10+valY)*max);
                  }
             }
         }
-        this.x+=val_x;
-        this.y+=val_y;
+        if(sortie)
+        {
+            for(var i=0;i<4;i++)
+            {
+                for(var j=0;j<4;j++)
+                {
+                    if(this.mats[i][j]!==0)
+                    {
+                        this.mats[i][j]+=-valX;
+                    }
+                }
+            }
+        }
+        else
+        {
+          this.x+=valX;
+        }
+        this.y+=valY;
            
     }
 
@@ -93,9 +116,9 @@ class piece  {
         {
             for(j=0;j<4;j++)
             {
-               if(max<this.mat[i][j])
+               if(max<this.mats[i][j])
                {
-                 max=this.mat[i][j];
+                 max=this.mats[i][j];
                }
             }
         }
@@ -138,7 +161,7 @@ class piece  {
         {
             for(j=0;j<4;j++)
             {
-                if((this.mat[i][j]===pos)&&(pos>0))
+                if((this.mats[i][j]===pos)&&(pos>0))
                 {
                     return true;
                 }
@@ -149,13 +172,12 @@ class piece  {
     
     getMatX( i, j,w)
     {   
-        console.log(this.mat[i][j]);
-       return (this.mat[i][j]%w);
+       return (this.mats[i][j]%w);
     }
     
     getMatY(i, j,w)
     {
-       return(this.mat[i][j]/w);
+       return(this.mats[i][j]/w);
     }
 }
 
