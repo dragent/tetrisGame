@@ -6,7 +6,6 @@ For a Java Web and Mobile Web formation i had to create a tetris game, so i made
 rigth now : 
     
     - done :
-        Colision with down border
         Creation of many object
         Creation of the forms
         Random creation and selection of object and forms
@@ -16,15 +15,16 @@ rigth now :
         Colision with the top
         Getting actual time
         Correction of the value position on the grill
-        
-    - doing :
         Event on key board
         Colision with the right and left border
+        
+    - doing :
+        Colision with down border
+        Restart of the game
               
               
     - undone : 
         Suppresion of lines
         Update of the score
-        Restart of the game
         Putting Css
         
