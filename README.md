@@ -18,6 +18,8 @@ rigth now :
         Colision with the right and left border
         Colision with down border
         Restart of the game
+        Rotation of pieces
+        
         
     - doing :
         Suppresion of lines
