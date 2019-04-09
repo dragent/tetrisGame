@@ -12,13 +12,13 @@ rigth now :
         Random creation and selection of object and forms
         Animation to the bottom
         Save of the locations of the last piece
-        Correction of the value position on the grill
         Colision between the piece
         Colision with the top
         Getting actual time
         
     - doing :
         Event on key board
+        Correction of the value position on the grill
         Colision with the right and left border
               
               
