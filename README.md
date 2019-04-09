@@ -11,20 +11,20 @@ rigth now :
         Random creation and selection of object and forms
         Animation to the bottom
         Save of the locations of the last piece
-        Colision between the piece
         Colision with the top
         Getting actual time
         Correction of the value position on the grill
         Event on key board
         Colision with the right and left border
-        
-    - doing :
         Colision with down border
         Restart of the game
+        
+    - doing :
+        Suppresion of lines
+        Colision between the piece ( need improve)
               
               
     - undone : 
-        Suppresion of lines
         Update of the score
         Putting Css
         
