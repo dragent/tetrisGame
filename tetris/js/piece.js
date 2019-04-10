@@ -11,6 +11,112 @@ function   verifSide(actX,i,valX,max)
     return (((actX+(i*25)+valX)<0)||((actX+(i*25)+valX)>=max));
 }
     
+function rotateForm0(piece)
+{
+    switch(piece.forme){
+        case 'square': piece.mats=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 'L_forme': piece.mats=[[1,1,1,0],[0,0,1,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=2;
+                break;
+        case 't_forme': piece.mats=[[1,0,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 'line' : piece.mats=[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]];
+                        piece.h=4;
+                break;
+        case 'No_L_forme':piece.mats=[[0,0,1,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=3;
+                break;
+        case 'Z_forme':piece.mats=[[1,0,0,0],[1,1,0,0],[0,1,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 'No_Z_forme' : piece.mats=[[0,1,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+    }
+}
+
+function rotateForm1(piece)
+{
+    switch(piece.forme){
+        case 'square': piece.mats=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+                break;
+        case 'L_forme': piece.mats=[[1,0,0,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 't_forme': piece.mats=[[0,1,0,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=3;
+                break;
+        case 'line' : piece.mats=[[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=1;
+                break;
+        case 'No_L_forme':piece.mats=[[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]];
+                        piece.h=3;
+                break;
+        case 'Z_forme':piece.mats=[[0,1,1,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 'No_Z_forme' : piece.mats=[[1,1,0,0],[0,1,1,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+    }
+}
+
+function rotateForm2(piece)
+{
+    switch(piece.forme){
+        case 'square': piece.mats=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 'L_forme': piece.mats=[[1,0,0,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 't_forme': piece.mats=[[0,0,1,0],[0,1,1,0],[0,0,1,0],[0,0,0,0]];
+                        piece.h=3;
+                break;
+        case 'line' : piece.mats=[[0,0,0,1],[0,0,0,1],[0,0,0,1],[0,0,0,1]];
+                        piece.h=4;
+                break;
+        case 'No_L_forme':piece.mats=[[1,1,1,0],[1,0,0,0],[0,0,0,0],[0,0,0,0]];
+                        piece.h=3;
+                break;
+        case 'Z_forme':piece.mats=[[1,0,0,0],[1,1,0,0],[0,1,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+        case 'no_Z_forme':piece.mats=[[0,1,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
+                        piece.h=2;
+                break;
+    }
+}
+function rotateForm3(piece)
+{
+    switch(piece.forme){
+        case 'square': piece.mats=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=2;
+                break;
+        case 'L_forme': piece.mats=[[0,0,1,0],[0,0,1,0],[0,1,1,0],[0,0,0,0]];
+                       piece.h=3;
+                break;
+        case 't_forme': piece.mats=[[1,1,1,0],[0,1,0,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=2;
+                break;
+        case 'line' : piece.mats=[[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=1;
+                break;
+        case 'No_L_forme':piece.mats=[[1,0,0,0],[1,0,0,0],[1,1,0,0],[0,0,0,0]];
+                       piece.h=3;
+                break;
+        case 'Z_forme':piece.mats=[[0,1,1,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=3;
+                break;
+        case 'No_Z_forme' : piece.mats=[[1,1,0,0],[0,1,1,0],[0,0,0,0],[0,0,0,0]];
+                       piece.h=2;
+                break;
+    }
+}
+
 class piece  {
     
  
@@ -21,28 +127,14 @@ class piece  {
         this.id=incr;
         incr++;
         this.forme=forme;
-        switch(forme){
-            case 'square': this.mats=[[1,1,0,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
-                    break;
-            case 'L_forme': this.mats=[[1,1,1,0],[0,0,1,0],[0,0,0,0],[0,0,0,0]];
-                    break;
-            case 't_forme': this.mats=[[1,0,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
-                    break;
-            case 'line' : this.mats=[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]];
-                    break;
-            case 'No_L_forme':this.mats=[[0,0,1,0],[1,1,1,0],[0,0,0,0],[0,0,0,0]];
-                    break;
-            case 'Z_forme':this.mats=[[1,0,0,0],[1,1,0,0],[0,1,0,0],[0,0,0,0]];
-                    break;
-            case 'No_Z_forme' : this.mats=[[0,1,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
-                    break;
-        }
+        rotateForm0(this);
+        this.state=0;
       
     }
     
   
     
-    miseEnPlace(x,max)
+    setUp(x,max)
     {
         this.x+=x;
         this.y=10;
@@ -58,7 +150,7 @@ class piece  {
         }
     }
     
-    changement(valX,valY,max)
+    change(valX,valY,max)
     {
         var first=false;
         var sortie=false;
@@ -85,6 +177,10 @@ class piece  {
                    this.mats[i][j]=(this.x+(25*i)+valX);
                    this.mats[i][j]+=((this.y+j*10+valY)*max);
                  }
+                 else
+                 {
+                      this.mats[i][j]=0;
+                 }
             }
         }
         if(sortie)
@@ -109,7 +205,7 @@ class piece  {
     }
 
     
-    touchefond(taille_max,largeur)
+    isBottom(taille_max,largeur)
     {
         var i,j,max=0;
         for(i=0;i<4;i++)
@@ -178,6 +274,38 @@ class piece  {
     getMatY(i, j,w)
     {
        return(this.mats[i][j]/w);
+    }
+    
+    rotate()
+    {
+        this.state=(this.state+1)%4;
+        
+        switch(this.state)
+        {
+            case 0 : rotateForm0(this);
+                break;
+            case 1 : rotateForm1(this);
+                break;
+            case 2 : rotateForm2(this);
+                break;
+            case 3 : rotateForm3(this);
+                break;
+        }
+    }
+    
+    clone(vrai)
+    {
+        this.setX(vrai.getX());
+        this.setY(vrai.getY());
+        this.id=vrai.id;
+        for(var i=0;i<4;i++)
+        {
+            for(var j=0;j<4;j++)
+            {
+                this.mats[i][j]=vrai.mats[i][j];
+            }
+        }
+        this.state=vrai.state;
     }
 }
 

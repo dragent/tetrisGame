@@ -9,7 +9,7 @@ $(document).ready(function()
 {
    
     var tableauMats=["L_forme","No_L_forme","Z_forme","No_Z_forme","t_forme","line","square"];
-    var descend=true;
+    var descend=false;
     var $cadre=$("#cadre").get(0);
     var $ctx=$("#cadre").get(0).getContext('2d');
     var $pseudo;
@@ -35,7 +35,7 @@ $(document).ready(function()
         $ctx.fillStyle='red';
     }
     
-    function creaCarre()
+    function creaSquare()
     {
         $ctx.fillStyle='blue';
     }
@@ -63,7 +63,7 @@ $(document).ready(function()
         $ctx.fillStyle='purple';
     }
     
-    function quadrillage()
+    function grid()
     {
         $ctx.strokeStyle = "rgba(0, 0, 0, 1)";
         $ctx.lineWidth  = '0.05';
@@ -77,9 +77,9 @@ $(document).ready(function()
     }
     
     
-    function creaAlea (pieceAff)
+    function creaRand (pieceAff)
     {
-        
+    
         switch(pieceAff.getForme())
         {
             case "L_forme" : creaL();
@@ -94,11 +94,9 @@ $(document).ready(function()
                 break;
             case "line" : creaLine();
                 break;
-            case "square" : creaCarre();
+            case "square" : creaSquare();
                 break;
         }
-      /*  console.log(pieceAff.getX());
-        console.log(pieceAff.getY());*/
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
@@ -110,7 +108,7 @@ $(document).ready(function()
             }
         }
     }
-    function dessin()
+    function drawPictures()
     {
         tmpX=x;
         tmpY=y;
@@ -118,7 +116,7 @@ $(document).ready(function()
         {
             x=tabPieces[i].getX();
             y=tabPieces[i].getY();
-            creaAlea(tabPieces[i]);
+            creaRand(tabPieces[i]);
         }
         x=tmpX;
         y=tmpY;
@@ -161,12 +159,34 @@ $(document).ready(function()
            switch(e.which) 
             {
                 case 39:val_x=w;
+                    val_y=0;
+                    modifPieceAct();
+                    descend=false;
+                    val_y=h;
                         break;
                 case 37 : val_x=-w;
+                    val_y=0;
+                    modifPieceAct();
+                    descend=false;
+                    val_y=h;
                     break;
-                case 40 : noEvent=false;
+                case 40 : val_y=h;
+                          modifPieceAct();
                     break;
-                case ' ': pieceAct.rotate();
+                case 32: var temp=new piece(pieceAct.forme);
+                    temp.clone(pieceAct);
+                    temp.rotate();
+                    val_x=0;
+                    val_y=0;
+                    temp.change(val_x,val_y,$cadre.width);
+                    isOnOtherPiece(temp);
+                    if(!descend)
+                    {
+                        pieceAct.clone(temp);
+                        creaRand(pieceAct);
+                    }
+                    descend=false;
+                    val_y=h;
                     break;
             }
         });
@@ -178,26 +198,38 @@ $(document).ready(function()
         y=0;
         x=5*w;
         pieceAct=new piece(tableauMats[rand]);
-        pieceAct.miseEnPlace(x,$cadre.width);
+        pieceAct.setUp(x,$cadre.width);
         draw();
     });
     
 
-    
-  
+    function modifPieceAct()
+    {
+        temp=new piece(pieceAct.getForme());
+        temp.clone(pieceAct);
+        temp.change(val_x,val_y,$cadre.width);
+        isOnOtherPiece(temp);
+        if(!descend)
+        {
+            pieceAct.clone(temp);
+            
+            val_x=0;
+        }
+        delete temp;
+    }
     
     /********************
      * 
      * @param {type} pieceAct
      * @return {Boolean}
      */
-    function  verifLoose(pieceAct)
+    function  isLoose(pieceAct)
     {
         for(i=0;i<4;i++)
         {
             for(j=0;j<4;j++)
             {
-                if((pieceAct.mats[i][j]<$cadre.width)&&(pieceAct.mats[i][j]>0))
+                if((pieceAct.mats[i][j]<$cadre.width)&&(pieceAct.mats[i][j]>0)&&(isOnOtherPiece(pieceAct)))
                     return true;
             }
         }
@@ -208,17 +240,18 @@ $(document).ready(function()
      * @param {type} temp
      * @return {Boolean}
      */
-    function verif(temp)
+    function isOnOtherPiece(temp)
     {
-        
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
             {
+            
                 for(var k=0;k<tabPieces.length;k++)
                 {   
                     if(tabPieces[k].isOnIt(temp.mats[i][j]))
                     {
+                        descend=true;
                         return true;
                     }
                 }
@@ -227,72 +260,48 @@ $(document).ready(function()
         return false;
     }
 
-    
-    function clone(clone,vrai)
+    function  verifLines()
     {
-        clone.setX(vrai.getX());
-        clone.setY(vrai.getY());
-        clone.id=vrai.id;
-        for(var i=0;i<4;i++)
-        {
-            for(var j=0;j<4;j++)
-            {
-                clone.mats[i][j]=vrai.mats[i][j];
-            }
-        }
+       
     }
+    
+  
     
     function draw()
     {
         $ctx.clearRect(0,0,$cadre.width,$cadre.height);
-        if(tabPieces.length>0)
-            dessin();
-        creaAlea(pieceAct);
-        quadrillage();
-        temp=new piece(pieceAct.getForme());
-        clone(temp, pieceAct);
-        if((!(pieceAct.touchefond($cadre.height,$cadre.width)))&&(descend) )
+        drawPictures();
+        creaRand(pieceAct);
+        grid();
+      
+        if((!(pieceAct.isBottom($cadre.height,$cadre.width)))&&(!descend))
         { 
-            temp.changement(val_x,val_y,$cadre.width);
-            if(verif(temp))
-            {
-                descend=false;
-            }
-            else
-            {
-                
-                clone(pieceAct,temp);
-                val_x=0;
-            }
-            if(noEvent)
-                window.requestAnimationFrame(function(){setTimeout(draw, 200);});
-            else
-            {
-               noEvent=true;
-               draw();
-            }
+           modifPieceAct();
+            window.requestAnimationFrame(function(){setTimeout(draw, 200);});
         }
         else
         {
-            descend=true;
+            descend=false;
             tabPieces.push(pieceAct);
+            verifLines();
             val_x=0;
             rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
-            if(!verifLoose(pieceAct))
+            if(!isLoose(pieceAct))
             {
                 
                 pieceAct=new piece(tableauMats[rand]);
-                pieceAct.miseEnPlace(x,$cadre.width);
+                pieceAct.setUp(x,$cadre.width);
                 window.requestAnimationFrame(function(){setTimeout(draw, 200);});
                     
             }
             else
             {
-                if ( confirm( "Message à afficher" ) ) {
+                if ( confirm( "Voulez vous rejouez ?") ) {
                     tabPieces=[];
+                    descend=false;
                     rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
                     pieceAct=new piece(tableauMats[rand]);
-                    pieceAct.miseEnPlace(x,$cadre.width);
+                    pieceAct.setUp(x,$cadre.width);
                     window.requestAnimationFrame(function(){setTimeout(draw, 200);});
                 } else {
                     // Code à éxécuter si l'utilisateur clique sur "Annuler" 
