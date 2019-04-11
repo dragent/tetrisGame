@@ -19,14 +19,14 @@ rigth now :
         Colision with down border
         Restart of the game
         Rotation of pieces
+        Colision between the piece ( need improve)
+        Update of the score
         
         
     - doing :
         Suppresion of lines
-        Colision between the piece ( need improve)
               
               
     - undone : 
-        Update of the score
         Putting Css
         
