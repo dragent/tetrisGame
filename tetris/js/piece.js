@@ -4,13 +4,19 @@
  * 
  */
 
+//private static var for id
 var incr=0;
 
+//private function on codition side
 function   verifSide(actX,i,valX,max)
 {
     return (((actX+(i*25)+valX)<0)||((actX+(i*25)+valX)>=max));
 }
-    
+ 
+ 
+/*******************************************************************************
+ ************************* private Rotation Function ***************************
+ ******************************************************************************/ 
 function rotateForm0(piece)
 {
     switch(piece.forme){
@@ -18,7 +24,7 @@ function rotateForm0(piece)
                         piece.h=2;
                 break;
         case 'L_forme': piece.mats=[[1,1,1,0],[0,0,1,0],[0,0,0,0],[0,0,0,0]];
-                       piece.h=2;
+                       piece.h=3;
                 break;
         case 't_forme': piece.mats=[[1,0,0,0],[1,1,0,0],[1,0,0,0],[0,0,0,0]];
                         piece.h=2;
@@ -109,7 +115,7 @@ function rotateForm3(piece)
                        piece.h=3;
                 break;
         case 'Z_forme':piece.mats=[[0,1,1,0],[1,1,0,0],[0,0,0,0],[0,0,0,0]];
-                       piece.h=3;
+                       piece.h=2;
                 break;
         case 'No_Z_forme' : piece.mats=[[1,1,0,0],[0,1,1,0],[0,0,0,0],[0,0,0,0]];
                        piece.h=2;
@@ -117,22 +123,29 @@ function rotateForm3(piece)
     }
 }
 
-class piece  {
+class Piece  {
     
- 
+    /*
+     * 
+     * @param {type} forme
+     * @return {piece}
+     * 
+     * Constructor of Piece object
+     */
     constructor(forme)
     {
         this.x=0;
         this.y=0;
         this.id=incr;
-        incr++;
         this.forme=forme;
         rotateForm0(this);
         this.state=0;
-      
-    }
+    }  
     
-  
+    
+    /***************************************************************************
+     *********** Coding's part on modification and setting position ************
+     **************************************************************************/
     
     setUp(x,max)
     {
@@ -152,24 +165,13 @@ class piece  {
     
     change(valX,valY,max)
     {
-        var first=false;
         var sortie=false;
-        var min;
         for(var i=0;i<4;i++)
         {
             for(var j=0;j<4;j++)
             {
                 if(this.mats[i][j]!==0)
                 { 
-                   if(!first)
-                   {
-                      min=this.mats[i][j];
-                      first=!first;
-                   }
-                   else if (min>this.mats[i][j])
-                   {
-                       min=this.mats[i][j];
-                   }
                    if(verifSide(this.x,i,valX,max))
                    {
                        sortie=true;
@@ -201,10 +203,27 @@ class piece  {
           this.x+=valX;
         }
         this.y+=valY;
-           
     }
 
-    
+    rotate()
+    {
+        this.state=(this.state+1)%4;
+
+        switch(this.state)
+        {
+            case 0 : rotateForm0(this);
+                break;
+            case 1 : rotateForm1(this);
+                break;
+            case 2 : rotateForm2(this);
+                break;
+            case 3 : rotateForm3(this);
+                break;
+        }
+    }
+    /***************************************************************************
+     ************************ Coding's part of Verification ********************
+     **************************************************************************/
     isBottom(taille_max,largeur)
     {
         var i,j,max=0;
@@ -221,36 +240,7 @@ class piece  {
         max=max/largeur;
         return (taille_max-10)<max;        
     }
-    
-    getX()
-    {
-        return this.x;
-    }
-    
-    getY()
-    {
-        return this.y;
-    }
-    
-    getForme()
-    {
-        return this.forme;
-    }
-     setX(x)
-    {
-       this.x=x;
-    }
-    
-    setY(y)
-    {
-       this.y=y;
-    }
-    
-    setForme(forme)
-    {
-        this.forme=forme;
-    }
-    
+
     isOnIt( pos)
     {
         for(i=0;i<4;i++)
@@ -266,31 +256,75 @@ class piece  {
         return false;
     }
     
+    /**************************************************************************
+     ***********************  Coding's part on getter *************************
+     *************************************************************************/
+    
     getMatX( i, j,w)
     {   
-       return (this.mats[i][j]%w);
+       return this.mats[i][j]%w;
     }
     
+    getMatLinIndex(pos,max,w)
+    {
+        return (pos%max)/w;
+    }
+     getMatColIndex(pos,max,h)
+    {
+        return (pos/max)/h;
+    }
     getMatY(i, j,w)
     {
-       return(this.mats[i][j]/w);
+       return Math.floor(this.mats[i][j]/w);
     }
     
-    rotate()
+    getX()
     {
-        this.state=(this.state+1)%4;
-        
-        switch(this.state)
-        {
-            case 0 : rotateForm0(this);
-                break;
-            case 1 : rotateForm1(this);
-                break;
-            case 2 : rotateForm2(this);
-                break;
-            case 3 : rotateForm3(this);
-                break;
-        }
+        return this.x;
+    }
+    
+    getY()
+    {
+        return this.y;
+    }
+    
+    getId()
+    {
+        return this.id;
+    }
+    
+    getForme()
+    {
+        return this.forme;
+    }
+    
+    /**************************************************************************
+     ***********************  Coding's part on setter *************************
+     *************************************************************************/
+    setX(x)
+    {
+       this.x=x;
+    }
+    
+    setY(y)
+    {
+       this.y=y;
+    }
+    
+    setForme(forme)
+    {
+        this.forme=forme;
+    }
+    
+    upId()
+    {
+        incr++;
+        this.id=incr;
+    }
+    
+    setPositionValue(pos,i,j)
+    {
+        this.mat[i][j]=pos;
     }
     
     clone(vrai)

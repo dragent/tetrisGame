@@ -26,7 +26,7 @@ h1{
     background-color: #E0E0E0;
     height: 500px;
     position: absolute;
-    left:33%;
+    left:12%;
     width: 400px;
     border: 5px solid #FFFFFF;
     visibility: hidden;
@@ -40,7 +40,7 @@ h1{
     left:40%;
 }
 
-#Pseudo_joueur{
+#pseudoJoueur{
     position: absolute;
     right:5%;
     top:30%;
@@ -59,4 +59,33 @@ h1{
     top:5%;
     left:5%;
     color: white;
+}
+
+#fin{
+    visibility:hidden;
+    position: absolute;
+    top : 25%;
+    left:25%;
+    width: 300px;
+}
+
+#restart{
+    position: relative;
+    width: 100px;
+    left:150px;
+}
+
+#pseudoTextReplay
+{
+    position: relative;
+    top:35px;
+    left: 155px;
+}
+
+
+
+.buttonRes {
+    position: relative;
+    top : 80px;
+    left : 40px;
 }

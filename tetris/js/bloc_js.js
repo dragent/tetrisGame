@@ -7,26 +7,27 @@
 
 $(document).ready(function()
 {
-   
     var tableauMats=["L_forme","No_L_forme","Z_forme","No_Z_forme","t_forme","line","square"];
-    var descend=false;
+    var descend;
     var $cadre=$("#cadre").get(0);
-    var $ctx=$("#cadre").get(0).getContext('2d');
+    var $ctx=$cadre.getContext('2d');
     var $pseudo;
-    var w,h,rand,x,y,val_x,val_y;
-    var point=0;
+    var w,h,rand,x,y,valX,val_y;
+    var point;
     var pieceAct;
     var tabPieces=new Array;
-    var noEvent =1;
+    var memoryPiecesLines;
     
     
     /******************************************************************************************************************************************************
      * 
-     * 
+     *  launcher of clock
      *****************************************************************************************************************************************************/
     getTime();
+    
+    
     /******************************************************************************************************************************************************
-     * 
+     * Part with all the graphics functions
      *
      ******************************************************************************************************************************************************/
 
@@ -124,7 +125,7 @@ $(document).ready(function()
 
     
     /******************************************************************************************************************************************************
-     * 
+     * Part with the Clock's launcher and the Game's launher 
      ******************************************************************************************************************************************************/
     async function getTime()
     {
@@ -136,86 +137,169 @@ $(document).ready(function()
     }
     
     
-    
-    $("#valid").click(function ()
+    function eventCrea()
     {
-        if($('#pseudo_text').val()!=='')
-        {
-            $pseudo=$("#pseudo_text").val();
-        }
-        else
-        {
-            $pseudo="Joueur 1";
-        }
-        $("#valid").css("visibility","hidden");
-        $("#pseudo_text").css("visibility","hidden");
-        $("#pseudo").css("visibility","hidden");
-        $("#cadre").css("visibility","visible");
-        $("#Pseudo_joueur").text($pseudo);
-        $("#Points").text(point+" pts.");
-        val_y=h;
         $(document).keydown( function(e)
         {
            switch(e.which) 
             {
-                case 39:val_x=w;
+                case 39:valX=w;
                     val_y=0;
                     modifPieceAct();
-                    descend=false;
                     val_y=h;
                         break;
-                case 37 : val_x=-w;
+                case 37 : valX=-w;
                     val_y=0;
                     modifPieceAct();
-                    descend=false;
                     val_y=h;
                     break;
                 case 40 : val_y=h;
                           modifPieceAct();
                     break;
-                case 32: var temp=new piece(pieceAct.forme);
+                case 32: var temp=new Piece(pieceAct.forme);
                     temp.clone(pieceAct);
                     temp.rotate();
-                    val_x=0;
+                    valX=0;
                     val_y=0;
-                    temp.change(val_x,val_y,$cadre.width);
+                    temp.change(valX,val_y,$cadre.width);
                     isOnOtherPiece(temp);
                     if(!descend)
                     {
                         pieceAct.clone(temp);
                         creaRand(pieceAct);
                     }
-                    descend=false;
                     val_y=h;
                     break;
             }
+            descend=false;
         });
-        val_x=0;
+    }
+    
+    function cssSwitcher()
+    {
+        if($('#pseudoText').val()!=='')
+        {
+            $pseudo=$("#pseudoText").val();
+        }
+        else
+        {
+            $pseudo="Joueur 1";
+        }
+        $("#valid").css("visibility","hidden");
+        $("#pseudoText").css("visibility","hidden");
+        $("#pseudo").css("visibility","hidden");
+        $("#cadre").css("visibility","visible");
+        $("#pseudoJoueur").text($pseudo);
+        $("#Points").text(point+" pts.");
+    }
+    
+    function initVar()
+    {
+        valX=0;
         w=$cadre.width/12;
         h=10;
         val_y=h;
-        rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
         y=0;
         x=5*w;
-        pieceAct=new piece(tableauMats[rand]);
+        rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
+        pieceAct=new Piece(tableauMats[rand]);
         pieceAct.setUp(x,$cadre.width);
+        tabPieces=[];
+        point=0;
+        descend=false;
+        memoryPiecesLines=[15];
+        for(var i=0;i<15;i++)
+        {
+            memoryPiecesLines[i]=[12];
+            for(var j=0;j<12;j++)
+            {
+                memoryPiecesLines[i][j]=-1;
+            }
+        }
+    }
+    
+    
+    $("#valid").click(function ()
+    {
+        eventCrea();
+        initVar();
+        cssSwitcher();
         draw();
     });
     
-
+    function deleteLine(start)
+    {
+        var i,j,k,x,y;
+        var upPiece;
+        var indexX,indexY;
+        for(i=start;i>0;i++)
+        {
+            for(j=0;j<12;j++)
+            {
+                memoryPiecesLines[pieceAct.getMatY(i,j,$cadre.width)/10][pieceAct.getMatX(i,j,$cadre.width)/25]=memoryPiecesLines[pieceAct.getMatY(i-1,j,$cadre.width)/10][pieceAct.getMatX(i-1,j,$cadre.width)/25]=pieceAct.getId();
+                for(k=0;k<tabPieces.length;k++)
+                {
+                    if(tabPieces[k].isOnIt((j*25)+((i-1)*$cadre.width)))
+                    {
+                      for(x=0;x<4;x++)
+                      {
+                        tabPieces[k]
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            }
+        }
+        for(j=0;j<12;j++)
+        { 
+            memoryPiecesLines[pieceAct.getMatY(i,j,$cadre.width)/10][pieceAct.getMatX(i,j,$cadre.width)/25]=-1;
+        }
+    }
+    
+    
     function modifPieceAct()
     {
-        temp=new piece(pieceAct.getForme());
+        temp=new Piece(pieceAct.getForme());
         temp.clone(pieceAct);
-        temp.change(val_x,val_y,$cadre.width);
+        temp.change(valX,val_y,$cadre.width);
         isOnOtherPiece(temp);
         if(!descend)
         {
             pieceAct.clone(temp);
             
-            val_x=0;
+            valX=0;
         }
         delete temp;
+    }
+    
+    
+    function pushPiece()
+    {
+        for(var i=0;i<4;i++)
+        {
+            for(var j =0;j<4;j++)
+            {
+                if(pieceAct.mats[i][j]!==0)
+                {
+                   memoryPiecesLines[pieceAct.getMatY(i,j,$cadre.width)/10][pieceAct.getMatX(i,j,$cadre.width)/25]=pieceAct.getId();   
+                }
+            }
+        }
+    }
+    
+    function affichage()
+    {
+        for(i = 0 ; i<15;i++)
+        {
+            for(j=0;j<12;j++)
+            {
+                console.log(memoryPiecesLines[i][j]);
+            }
+        }
+            
     }
     
     /********************
@@ -227,7 +311,7 @@ $(document).ready(function()
     {
         for(i=0;i<4;i++)
         {
-            for(j=0;j<4;j++)
+            for(j=0;j<pieceAct.h;j++)
             {
                 if((pieceAct.mats[i][j]<$cadre.width)&&(pieceAct.mats[i][j]>0)&&(isOnOtherPiece(pieceAct)))
                     return true;
@@ -235,6 +319,7 @@ $(document).ready(function()
         }
         return false;
     }
+    
     /*****************
      * 
      * @param {type} temp
@@ -262,7 +347,26 @@ $(document).ready(function()
 
     function  verifLines()
     {
-       
+       var isLineFull;
+       for(i=0;i<15;i++)
+       {
+           isLineFull=true;
+           for(j=0;j<12;j++)
+           {
+               if(memoryPiecesLines[i][j]===-1)
+               {
+                   isLineFull=false;
+                   break;
+               }
+           }
+           if(isLineFull)
+           {
+               //console.log("verif");
+               point+=10;
+               $("#Points").text(point+" pts.");
+               //deleteLine(i);
+           }
+       }
     }
     
   
@@ -273,39 +377,43 @@ $(document).ready(function()
         drawPictures();
         creaRand(pieceAct);
         grid();
-      
         if((!(pieceAct.isBottom($cadre.height,$cadre.width)))&&(!descend))
         { 
-           modifPieceAct();
+            modifPieceAct();
             window.requestAnimationFrame(function(){setTimeout(draw, 200);});
         }
         else
         {
             descend=false;
+            pieceAct.upId();
             tabPieces.push(pieceAct);
+            pushPiece();
+            affichage();
             verifLines();
-            val_x=0;
-            rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
+            valX=0;
             if(!isLoose(pieceAct))
             {
                 
-                pieceAct=new piece(tableauMats[rand]);
+                rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
+                pieceAct=new Piece(tableauMats[rand]);
                 pieceAct.setUp(x,$cadre.width);
                 window.requestAnimationFrame(function(){setTimeout(draw, 200);});
                     
             }
             else
             {
-                if ( confirm( "Voulez vous rejouez ?") ) {
-                    tabPieces=[];
-                    descend=false;
-                    rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
-                    pieceAct=new piece(tableauMats[rand]);
-                    pieceAct.setUp(x,$cadre.width);
-                    window.requestAnimationFrame(function(){setTimeout(draw, 200);});
-                } else {
-                    // Code à éxécuter si l'utilisateur clique sur "Annuler" 
-                }
+                $("#cadre").css("visibility","hidden");
+                $("#pseudoTextReplay").val($pseudo);
+                $("#fin").css("visibility","visible");
+                $("#yes").click(function ()
+                {
+                    $("#fin").css("visibility","hidden");
+                    $("#pseudoText").val($("#pseudoTextReplay").val());
+                    eventCrea();
+                    initVar();
+                    cssSwitcher();
+                    draw();
+                });
             }
         }
     }    
