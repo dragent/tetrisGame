@@ -29,4 +29,16 @@ rigth now :
               
     - undone : 
         Putting Css
+
+    - User's Event : 
+        button at launch with pseudo selection for starting a game
+        button at the end with pseudo selection for restarting a game 
+        '->' for moving a piece on right side
         
+        '<-' for moving a piece on left side 
+        
+        ' ^ '
+        ' | '   for rotating a piece 
+    
+        ' | ' 
+        ' v '  for moving a piece faster to the bottom
