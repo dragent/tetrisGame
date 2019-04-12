@@ -12,7 +12,7 @@ $(document).ready(function()
     var $cadre=$("#cadre").get(0);
     var $ctx=$cadre.getContext('2d');
     var $pseudo;
-    var w,h,rand,x,y,valX,val_y;
+    var w,h,rand,x,y,valX,valY;
     var point;
     var pieceAct;
     var tabPieces=new Array;
@@ -127,6 +127,12 @@ $(document).ready(function()
     /******************************************************************************************************************************************************
      * Part with the Clock's launcher and the Game's launher 
      ******************************************************************************************************************************************************/
+   
+    /***************************************************************************
+     * 
+     * asynchron function updating the time
+     * 
+     **************************************************************************/
     async function getTime()
     {
         var $time=$("#time");
@@ -137,6 +143,11 @@ $(document).ready(function()
     }
     
     
+    /***************************************************************************
+     * 
+     * create all event listener in jQuery
+     * 
+     **************************************************************************/
     function eventCrea()
     {
         $(document).keydown( function(e)
@@ -144,37 +155,58 @@ $(document).ready(function()
            switch(e.which) 
             {
                 case 39:valX=w;
-                    val_y=0;
+                    valY=0;
                     modifPieceAct();
-                    val_y=h;
+                        $ctx.clearRect(0,0,$cadre.width,$cadre.height);
+                        drawPictures();
+                        creaRand(pieceAct);
+                        grid();
+                    valY=h;
                         break;
                 case 37 : valX=-w;
-                    val_y=0;
+                    valY=0;
                     modifPieceAct();
-                    val_y=h;
+                        $ctx.clearRect(0,0,$cadre.width,$cadre.height);
+                        drawPictures();
+                        creaRand(pieceAct);
+                        grid();
+                    valY=h;
                     break;
-                case 40 : val_y=h;
-                          modifPieceAct();
+                case 40 : valY=h;
+                            modifPieceAct();
+                        $ctx.clearRect(0,0,$cadre.width,$cadre.height);
+                        drawPictures();
+                        creaRand(pieceAct);
+                        grid();
                     break;
                 case 32: var temp=new Piece(pieceAct.forme);
                     temp.clone(pieceAct);
                     temp.rotate();
                     valX=0;
-                    val_y=0;
-                    temp.change(valX,val_y,$cadre.width);
+                    valY=0;
+                    temp.change(valX,valY,$cadre.width);
                     isOnOtherPiece(temp);
                     if(!descend)
                     {
                         pieceAct.clone(temp);
+                        $ctx.clearRect(0,0,$cadre.width,$cadre.height);
+                        drawPictures();
                         creaRand(pieceAct);
+                        grid();
                     }
-                    val_y=h;
+                    valY=h;
                     break;
             }
             descend=false;
         });
     }
     
+    
+    
+    /*******************************************************************************************************
+     * 
+     * Part with all the initializing function
+     ******************************************************************************************************/
     function cssSwitcher()
     {
         if($('#pseudoText').val()!=='')
@@ -198,7 +230,7 @@ $(document).ready(function()
         valX=0;
         w=$cadre.width/12;
         h=10;
-        val_y=h;
+        valY=h;
         y=0;
         x=5*w;
         rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
@@ -218,7 +250,9 @@ $(document).ready(function()
         }
     }
     
-    
+    /**************************************************************************
+     * starting function
+     *************************************************************************/
     $("#valid").click(function ()
     {
         eventCrea();
@@ -227,44 +261,70 @@ $(document).ready(function()
         draw();
     });
     
+    
+    /***************************************************************************
+     * 
+     * @param {type} start
+     * @return {undefined}
+     * 
+     * ISN T WORKING
+     * 
+     * get the upline of the one that we read at each loop iteration and put all
+     * the values of the superior one in our actual one
+     * 
+     */
     function deleteLine(start)
     {
-        var i,j,k,x,y;
+        var i,j;
         var upPiece;
+        var actualPiece;
         var indexX,indexY;
-        for(i=start;i>0;i++)
+        for(i=start;i>0;i--)
         {
             for(j=0;j<12;j++)
             {
-                memoryPiecesLines[pieceAct.getMatY(i,j,$cadre.width)/10][pieceAct.getMatX(i,j,$cadre.width)/25]=memoryPiecesLines[pieceAct.getMatY(i-1,j,$cadre.width)/10][pieceAct.getMatX(i-1,j,$cadre.width)/25]=pieceAct.getId();
-                for(k=0;k<tabPieces.length;k++)
+                indexY=pieceAct.getMatColIndex(j*25+i*$cadre.width,$cadre.width,h);
+                indexX=pieceAct.getMatLinIndex(j*25+i*$cadre.width,$cadre.width,w);
+                upPiece=memoryPiecesLines[indexY-1][indexX];
+                actualPiece=memoryPiecesLines[indexY][indexX];
+                if(actualPiece!==-1)
                 {
-                    if(tabPieces[k].isOnIt((j*25)+((i-1)*$cadre.width)))
+                    if(upPiece!==-1)
                     {
-                      for(x=0;x<4;x++)
-                      {
-                        tabPieces[k]
-                        }
+                        tabPieces[actualPiece].setPositionValue(indexX,indexY);
+                        memoryPiecesLines[indexY][indexX]=upPiece;
                     }
                     else
                     {
-                        
+                       if(memoryPiecesLines[indexY][indexX]!==-1)
+                       {
+                          tabPieces[memoryPiecesLines[indexY][indexX]].setPositionValue(0,indexX,indexY);
+                          memoryPiecesLines[indexY][indexX]=-1;
+                       }
                     }
                 }
+                
             }
         }
         for(j=0;j<12;j++)
         { 
-            memoryPiecesLines[pieceAct.getMatY(i,j,$cadre.width)/10][pieceAct.getMatX(i,j,$cadre.width)/25]=-1;
+            memoryPiecesLines[0][j]=-1;
         }
     }
     
+    
+    /***************************************************************************
+     * 
+     * @return {undefined}
+     * 
+     * create a temp piece for modification and create
+     **************************************************************************/
     
     function modifPieceAct()
     {
         temp=new Piece(pieceAct.getForme());
         temp.clone(pieceAct);
-        temp.change(valX,val_y,$cadre.width);
+        temp.change(valX,valY,$cadre.width);
         isOnOtherPiece(temp);
         if(!descend)
         {
@@ -276,6 +336,14 @@ $(document).ready(function()
     }
     
     
+    
+    /***************************************************************************
+     * 
+     * @return {undefined}
+     * 
+     * give the id of actual piece and register in the Canvas's matrix
+     * 
+     **************************************************************************/
     function pushPiece()
     {
         for(var i=0;i<4;i++)
@@ -284,12 +352,19 @@ $(document).ready(function()
             {
                 if(pieceAct.mats[i][j]!==0)
                 {
+                 
                    memoryPiecesLines[pieceAct.getMatY(i,j,$cadre.width)/10][pieceAct.getMatX(i,j,$cadre.width)/25]=pieceAct.getId();   
                 }
             }
         }
     }
     
+    
+    /***************************************************************************
+     * 
+     * debugging's function
+     * 
+     **************************************************************************/
     function affichage()
     {
         for(i = 0 ; i<15;i++)
@@ -302,10 +377,19 @@ $(document).ready(function()
             
     }
     
-    /********************
+    /***************************************************************************
+     * 
+     * part handing the verification function
+     *
+     **************************************************************************/
+    
+    /***************************************************************************
      * 
      * @param {type} pieceAct
      * @return {Boolean}
+     * 
+     * Watch if the tetris touch the top border of the canvas
+     * 
      */
     function  isLoose(pieceAct)
     {
@@ -320,11 +404,15 @@ $(document).ready(function()
         return false;
     }
     
-    /*****************
+    /***************************************************************************
      * 
      * @param {type} temp
      * @return {Boolean}
-     */
+     * 
+     * 
+     * Watch if a other piece was there before
+     * 
+     **************************************************************************/
     function isOnOtherPiece(temp)
     {
         for(var i=0;i<4;i++)
@@ -345,6 +433,13 @@ $(document).ready(function()
         return false;
     }
 
+    /***************************************************************************
+     * 
+     * @return {undefined}
+     * 
+     * watch if the lines was full and ask the delete of this one
+     * 
+     */
     function  verifLines()
     {
        var isLineFull;
@@ -361,16 +456,22 @@ $(document).ready(function()
            }
            if(isLineFull)
            {
-               //console.log("verif");
                point+=10;
                $("#Points").text(point+" pts.");
-               //deleteLine(i);
+               deleteLine(i);
            }
        }
     }
     
   
     
+    
+    /***************************************************************************
+     * 
+     * Function which turn without stopping, core of the program
+     * Call other functions + create new piece or call the end of the program (or the reastart)
+     * 
+     ***************************************************************************/
     function draw()
     {
         $ctx.clearRect(0,0,$cadre.width,$cadre.height);
@@ -388,8 +489,9 @@ $(document).ready(function()
             pieceAct.upId();
             tabPieces.push(pieceAct);
             pushPiece();
-            affichage();
+           // affichage();
             verifLines();
+            
             valX=0;
             if(!isLoose(pieceAct))
             {
@@ -397,7 +499,7 @@ $(document).ready(function()
                 rand=Math.floor(Math.random() * Math.floor(tableauMats.length));
                 pieceAct=new Piece(tableauMats[rand]);
                 pieceAct.setUp(x,$cadre.width);
-                window.requestAnimationFrame(function(){setTimeout(draw, 200);});
+                window.requestAnimationFrame(function(){setTimeout(draw, 1000);});
                     
             }
             else

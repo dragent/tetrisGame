@@ -221,9 +221,10 @@ class Piece  {
                 break;
         }
     }
+    
     /***************************************************************************
-     ************************ Coding's part of Verification ********************
-     **************************************************************************/
+    ************************* Coding's part of Verification ********************
+    ***************************************************************************/
     isBottom(taille_max,largeur)
     {
         var i,j,max=0;
@@ -269,12 +270,15 @@ class Piece  {
     {
         return (pos%max)/w;
     }
-     getMatColIndex(pos,max,h)
+    
+    getMatColIndex(pos,max)
     {
-        return (pos/max)/h;
+        return  Math.floor((pos/max));
     }
+    
     getMatY(i, j,w)
     {
+       
        return Math.floor(this.mats[i][j]/w);
     }
     
@@ -318,13 +322,24 @@ class Piece  {
     
     upId()
     {
-        incr++;
         this.id=incr;
+        incr++;
     }
     
-    setPositionValue(pos,i,j)
+    setPositionValue(x,y)
     {
-        this.mat[i][j]=pos;
+        for(i=0;i<4;i++)
+        {
+            for(j=0;j<4;j++)
+            {
+                    console.log( "value : "+this.mats[i][j]+"   /  " + (25*x+((y-1)*10*300)+" x "+x+"   y  "+y));
+               if(this.mats[i][j]===(25*x+y*10))
+                {
+                    this.mats[i][j]=25*x+(y-1)*10; 
+                    break;
+                }
+            }
+        }
     }
     
     clone(vrai)

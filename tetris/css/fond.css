@@ -7,27 +7,31 @@
     Created on : 1 avr. 2019, 13:56:48
     Author     : alexis
 */
+html
+{
 
+    overflow: hidden;
+}
 body{
-    width:95%;
-    height: 100%;
-    background-color: black;
+    width:100%;
+    height: 120%;
     color:White;
+    top: 0;
+    left: 0;
 }
 h1{
-    position:absolute;
+    position:relative;
     left:45%;
 }
 
 #cadre{
-    width: 100%;
-    height: 100%;
     border-color: #000000;
     background-color: #E0E0E0;
     height: 500px;
-    position: absolute;
+    position: relative;
     left:12%;
     width: 400px;
+    bottom: 0px;
     border: 5px solid #FFFFFF;
     visibility: hidden;
     top:15%;
@@ -35,35 +39,40 @@ h1{
 
 
 #pseudo{
-    position: absolute;
+    position: relative;
     top:45%;
     left:40%;
 }
 
 #pseudoJoueur{
-    position: absolute;
-    right:5%;
-    top:30%;
+    position: relative;
     font-size: 24px;
+    display: inline;
 }
 
 #Points{
-    position: absolute;
+    position: relative;
     right:5%;
     top:38%;
     font-size: 24px;
+    display: inline;
+    
 }
 
 #time{
-    position: absolute;
-    top:5%;
+    position: relative;
     left:5%;
     color: white;
 }
 
+#jeux
+{
+    width: 100%;
+}
+
 #fin{
     visibility:hidden;
-    position: absolute;
+    position: relative;
     top : 25%;
     left:25%;
     width: 300px;
@@ -88,4 +97,20 @@ h1{
     position: relative;
     top : 80px;
     left : 40px;
+}
+
+footer{
+    position: absolute;
+    background-image: url("../img/fondSol.png");
+    height: 5vh;
+    width: 100%;
+    bottom:  0vh;
+    left : 0px;
+}
+
+#fond {
+    height: 100%;
+    position:absolute;
+    top:0%;
+    left:0%;
 }
