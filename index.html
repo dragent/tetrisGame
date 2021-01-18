@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+
+
+
+-->
+<html lang="fr">
+    <head>
+        <title>Tétrimon</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/fond.css" rel="stylesheet" type="text/css"/>
+        <script src="../js/jquery/jquery-3.3.1.js"></script>
+        <script src="../js/piece.js"></script>
+        <script src="../js/bloc_js.js" ></script>
+    </head>
+    <body >
+        <img src=" ../img/fond.png" id="fond" alt='test'/>
+        <h1> Tetrimon </h1>
+        <label id="time"></label>
+        <div id="pseudo">
+            <input type="text" placeholder="Indiquez votre pseudo" id="pseudoText"/>
+            <button id="valid">do you want to start your journey ?</button>            
+        </div>
+        <div id="jeux">
+            <canvas id="cadre"></canvas>
+            <label id="pseudoJoueur"></label>
+            <label id="Points"></label>
+        </div>
+        <div id="fin">
+            <label id="restart">Do you want take an other way?</label>
+            <input type="text" placeholder="Indiquez votre pseudo" id="pseudoTextReplay"/>
+            <button id="yes" class="buttonRes">Yes</button>       
+            <button id="no" class="buttonRes">No</button>       
+        </div>
+        <footer></footer>
+    </body>
+</html>
