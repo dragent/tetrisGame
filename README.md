@@ -21,10 +21,11 @@ rigth now :
         Rotation of pieces
         Colision between the piece ( need improve)
         Update of the score
+        Suppresion of lines
         
         
     - doing :
-        Suppresion of lines
+        
               
               
     - undone : 
@@ -36,9 +37,8 @@ rigth now :
         '->' for moving a piece on right side
         
         '<-' for moving a piece on left side 
-        
-        ' ^ '
-        ' | '   for rotating a piece 
+
+        ' space key '   for rotating a piece 
     
         ' | ' 
         ' v '  for moving a piece faster to the bottom
